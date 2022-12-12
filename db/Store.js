@@ -2,40 +2,51 @@ const util = require('util');
 const fs = require('fs');
 const uuid = require('uuid');
 
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
+const readFileStore = util.promisify(fs.readFile);
+const writeFileStore = util.promisify(fs.writeFile);
 
 class Store {
     read() {
-        return readFile('db/db.json', 'utf-8');
+        return readFileStore('db/db.json', 'utf8');
     }
 
     write(note) {
-        return writeFile('db/db.json', JSON.stringify(note))
+        return writeFileStore('db/db.json', JSON.stringify(note));
     }
 
     addNote(note) {
-        const {title, content} = note
+        const {title, content} = note;
         if (!title || !content) {
             throw new Error ("Please enter title and content")
         }
 
-        const newNote = { title, text, id: uuid( )}
+        const newNote = { title, text, id: uuid()};
+
         return this.getNote()
             .then(notes => [...notes, newNote])
             .then(updatedNotes => this.write(updatedNotes))
-            .then(() => this.newNote)
+            .then(() => newNote);
     }
 
     getNote() {
         return this.read()
-            .then(notes => { return JSON.parse(notes) || []; })
+            .then(notes => {
+                let parsedNotes;
+
+                try {
+                    parsedNotes = [].concat(JSON.parse(notes));
+                } catch (err) {
+                    parsedNotes = [];
+                }
+
+                return parsedNotes;
+            });
     }
 
     deleteNote(id) {
         return this.getNote()
             .then(notes => notes.filter(note => note.id !== id))
-            .then(remainNote => this.write(remainNote))
+            .then(remainNote => this.write(remainNote));
     }
 }
 

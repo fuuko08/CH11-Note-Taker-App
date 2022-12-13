@@ -6,6 +6,10 @@ const readFileStore = util.promisify(fs.readFile);
 const writeFileStore = util.promisify(fs.writeFile);
 
 class Store {
+    constructor() {
+        this.lastId = 0;
+    }
+    
     read() {
         return readFileStore('db/db.json', 'utf8');
     }
@@ -15,9 +19,9 @@ class Store {
     }
 
     addNote(note) {
-        const {title, content} = note;
-        if (!title || !content) {
-            throw new Error ("Please enter title and content")
+        const {title, text} = note;
+        if (!title || !text) {
+            throw new Error ("Please enter title and text")
         }
 
         const newNote = { title, text, id: uuidv1()};

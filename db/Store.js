@@ -19,7 +19,7 @@ class Store {
     }
 
     addNote(note) {
-        const {title, text} = note;
+        const { title, text } = note;
         if (!title || !text) {
             throw new Error ("Please enter title and text")
         }

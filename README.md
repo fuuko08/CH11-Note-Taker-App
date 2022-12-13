@@ -43,9 +43,7 @@ THEN I am presented with empty fields to enter a new note title and the note’s
 
 ## Instruction
 
-Please follow the instruction to install the app
-
-to start the app, use the command "node index"
+To start the app, use the command "node index"
 
 <a name="usage"/>
 
